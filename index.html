@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Smart QR Attendance</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Style -->
+  <link rel="stylesheet" href="style-admin.css" />
+  <style>
+    /* Login Styling */
+    #login-page {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background: #2c3e50;
+      color: white;
+    }
+    .login-box {
+      background: #34495e;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 0 12px rgba(0,0,0,0.3);
+      width: 300px;
+    }
+    .login-box input {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: none;
+      border-radius: 4px;
+    }
+    .login-box button {
+      width: 100%;
+      padding: 10px;
+      background: #1abc9c;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .login-box button:hover {
+      background: #16a085;
+    }
+    .error {
+      color: #e74c3c;
+      font-size: 14px;
+      margin-top: 5px;
+    }
+    #admin-panel { display: none; }
+  </style>
+
+  <!-- External Libraries -->
+  <script src="https://cdn.jsdelivr.net/npm/html5-qrcode@latest/html5-qrcode.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- Audio -->
+  <audio id="sound-login-success" src="sounds/success.mp3" preload="auto"></audio>
+  <audio id="sound-login-fail" src="sounds/error.mp3" preload="auto"></audio>
+  <audio id="sound-scan-success" src="sounds/success.mp3" preload="auto"></audio>
+  <audio id="sound-scan-error" src="sounds/error.mp3" preload="auto"></audio>
+  <audio id="sound-tab" src="sounds/tab.mp3" preload="auto"></audio>
+  <audio id="sound-reset" src="sounds/reset.mp3" preload="auto"></audio>
+  <audio id="sound-button" src="sounds/click.mp3" preload="auto"></audio>
+</head>
+
+<body>
+
+<!-- LOGIN PAGE -->
+<div id="login-page">
+  <div class="login-box">
+    <h2>Admin Login</h2>
+    <input type="text" id="username" placeholder="Username" />
+    <input type="password" id="password" placeholder="Password" />
+    <button onclick="login()">Login</button>
+    <div class="error" id="error-msg"></div>
+  </div>
+</div>
+
+<!-- ADMIN PANEL -->
+<div id="admin-panel">
+  <!-- Place your full admin HTML content here -->
+  <!-- Example: -->
+  <header>
+    <img src="logo.png" alt="Logo" class="logo" />
+    <h1>Smart QR Attendance</h1>
+    <button onclick="logout()" style="position: absolute; right: 1rem;">Logout</button>
+  </header>
+
+  <!-- include the rest of your admin HTML (scanner, tabs, etc.) -->
+  <!-- Keep all your existing sections from the original index.html here -->
+
+</div>
+
+<!-- SCRIPTS -->
+<script>
+  // Run on page load
+  document.addEventListener("DOMContentLoaded", () => {
+    if (localStorage.getItem("loggedIn") === "true") {
+      document.getElementById("login-page").style.display = "none";
+      document.getElementById("admin-panel").style.display = "block";
+    }
+  });
+
+  function login() {
+    const user = document.getElementById("username").value.trim();
+    const pass = document.getElementById("password").value.trim();
+    const error = document.getElementById("error-msg");
+
+    if (user === "sairishi" && pass === "srg1306") {
+      localStorage.setItem("loggedIn", "true");
+      document.getElementById("login-page").style.display = "none";
+      document.getElementById("admin-panel").style.display = "block";
+      playSound("sound-login-success");
+    } else {
+      error.textContent = "Invalid username or password";
+      playSound("sound-login-fail");
+    }
+  }
+
+  function logout() {
+    localStorage.removeItem("loggedIn");
+    location.reload();
+  }
+
+  function playSound(id) {
+    const el = document.getElementById(id);
+    if (el) {
+      el.currentTime = 0;
+      el.play().catch(() => {});
+    }
+  }
+</script>
+
+<script src="script-admin.js"></script>
+</body>
+</html>
